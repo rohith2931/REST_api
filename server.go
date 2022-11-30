@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,7 +15,17 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open("postgres", "user=postgres password=root dbname=postgres sslmode=disable")
+	// db, err := gorm.Open("postgres", "user=postgres password=root dbname=postgres sslmode=disable")
+	//command Line Flags
+	var user, pass, dbname, sslmode string
+	flag.StringVar(&user, "user", "", "a string var")
+	flag.StringVar(&pass, "password", "", "a string var")
+	flag.StringVar(&dbname, "dbname", "", "a string var")
+	flag.StringVar(&sslmode, "sslmode", "disable", "a string var")
+	flag.Parse()
+	dbstring := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s", user, pass, dbname, sslmode)
+	db, err := gorm.Open("postgres", dbstring)
+
 	if err != nil {
 		panic(err.Error())
 	}
