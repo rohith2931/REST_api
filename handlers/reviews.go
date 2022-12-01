@@ -46,6 +46,22 @@ func (s Server) CreateReview(w http.ResponseWriter, r *http.Request) {
 	w.Write(product_review_json)
 }
 
+func (s Server) UpdateReview(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	rid, _ := strconv.Atoi(params["rid"])
+
+	var rev schema.Rating
+	body, _ := ioutil.ReadAll(r.Body)
+	err := json.Unmarshal(body, &rev)
+	if err != nil {
+		panic(err)
+	}
+	s.Db.Model(&schema.Rating{}).Where("id=?", rid).Updates(rev)
+	response, _ := json.Marshal(struct{ Message string }{Message: "Review Successfully Updated"})
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(response)
+}
+
 func (s Server) DeleteReview(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id, _ := strconv.Atoi(params["id"])

@@ -45,6 +45,8 @@ func main() {
 
 	router.HandleFunc("/api/products/{id}/reviews/create", s.CreateReview).Methods("POST")
 
+	router.HandleFunc("/api/products/{id}/reviews/{rid}", s.UpdateReview).Methods("PATCH")
+
 	router.HandleFunc("/api/reviews/{id}", s.DeleteReview).Methods("DELETE")
 	fmt.Println("Server at 9090")
 	log.Fatal(http.ListenAndServe(":9090", router))
